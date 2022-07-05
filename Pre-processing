@@ -1,0 +1,50 @@
+#Toxic Comment Classification using LSTM and LSTM-CNN.
+
+#Removing unneccasary characters
+#Removing Characters in between Text.
+#Removing Repeated Characters.
+#Converting data to lower-case.
+#Removing Punctuation.
+#Removing unnecessary white spaces in between words.
+#Removing “\n”.
+#Removing Non-English characters.
+
+#CODE
+def clean_text(text,remove_repeat_text=True, remove_patterns_text=True, is_lower=True):
+
+  if is_lower:
+    text=text.lower()
+    
+  if remove_patterns_text:
+    for target, patterns in RE_PATTERNS.items():
+      for pat in patterns:
+        text=str(text).replace(pat, target)
+
+  if remove_repeat_text:
+    text = re.sub(r'(.)\1{2,}', r'\1', text) 
+
+  text = str(text).replace("\n", " ")
+  text = re.sub(r'[^\w\s]',' ',text)
+  text = re.sub('[0-9]',"",text)
+  text = re.sub(" +", " ", text)
+  text = re.sub("([^\x00-\x7F])+"," ",text)
+  return text 
+  
+  #Lemmatization.
+  
+  def lemma(text, lemmatization=True):
+  output=""
+  if lemmatization:
+    text=text.split(" ")
+    for word in text:
+       word1 = wordnet_lemmatizer.lemmatize(word, pos = "n")
+       word2 = wordnet_lemmatizer.lemmatize(word1, pos = "v")
+       word3 = wordnet_lemmatizer.lemmatize(word2, pos = "a")
+       word4 = wordnet_lemmatizer.lemmatize(word3, pos = "r")
+       output=output + " " + word4
+  else:
+    output=text
+  
+  return str(output.strip())
+  
+  #
